@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ms-dotnettools.csharp",
+        "jchannon.csharpextensions",
+        "editorconfig.editorconfig",
+        "patcx.vscode-nuget-gallery"
+    ]
+}
