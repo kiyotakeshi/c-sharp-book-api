@@ -83,5 +83,33 @@ namespace BookApi.Controllers
             return Ok(categoriesDto);
         }
         // TODO: GetAllBooksForCategory
+        // api/categories/categoryId/books
+        [HttpGet("{categoryId}/books")]
+        [ProducesResponseType(400)] // 必須ではない記述、ドキュメント的な役割
+        [ProducesResponseType(404)] // 必須ではない記述、ドキュメント的な役割
+        [ProducesResponseType(200, Type = typeof(IEnumerable<BookDto>))] // 必須ではない記述、ドキュメント的な役割
+        public IActionResult GetAllBooksForCategory(int categoryId)
+        {
+            if(!_categoryRepository.CategoryExists(categoryId))
+                return NotFound();
+
+            var books = _categoryRepository.GetAllBooksForCategory(categoryId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var booksDto = new List<BookDto>();
+
+            foreach (var book in books)
+            {
+                booksDto.Add(new BookDto{
+                    Id = book.Id,
+                    Title = book.Title,
+                    Isbn = book.Isbn,
+                    DatePublished = book.DatePublished
+                });
+            }
+            return Ok(booksDto);
+        }
     }
 }

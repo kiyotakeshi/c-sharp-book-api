@@ -12,6 +12,6 @@ namespace BookApi.Services
         decimal GetBookRating(int bookId);
         bool BookExists(int bookId);
         bool BookExists(string bookIsbn);
-        bool IsDuplicateIsbn(int bookId,string bookIsbn)
+        bool IsDuplicateIsbn(int bookId,string bookIsbn);
     }
 }
