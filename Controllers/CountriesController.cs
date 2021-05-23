@@ -21,7 +21,7 @@ namespace BookApi.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<CountryDto>))] // 必須ではない記述、ドキュメント的な役割
         public IActionResult GetCountries()
         {
-            var countries = _countryRepository.GetCountries().ToList();
+            var countries = _countryRepository.GetCountries();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
