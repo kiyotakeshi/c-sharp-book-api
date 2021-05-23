@@ -36,7 +36,7 @@ namespace BookApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Counter",
+                name: "Countries",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -45,7 +45,7 @@ namespace BookApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Counter", x => x.Id);
+                    table.PrimaryKey("PK_Countries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,9 +100,9 @@ namespace BookApi.Migrations
                 {
                     table.PrimaryKey("PK_Authors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Authors_Counter_CountryId",
+                        name: "FK_Authors_Countries_CountryId",
                         column: x => x.CountryId,
-                        principalTable: "Counter",
+                        principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -205,7 +205,7 @@ namespace BookApi.Migrations
                 name: "Reviewers");
 
             migrationBuilder.DropTable(
-                name: "Counter");
+                name: "Countries");
         }
     }
 }
