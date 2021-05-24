@@ -10,10 +10,12 @@ namespace BookApi.Controllers
     public class ReviewersController: Controller
     {
         private IReviewerRepository _reviewerRepository;
+        private IReviewRepository _reviewRepository;
 
-        public ReviewersController(IReviewerRepository reviewerRepository)
+        public ReviewersController(IReviewerRepository reviewerRepository, IReviewRepository reviewRepository)
         {
             _reviewerRepository = reviewerRepository;
+            _reviewRepository = reviewRepository;
         }
 
         [HttpGet]
@@ -38,6 +40,83 @@ namespace BookApi.Controllers
                 });
             }
             return Ok(reviewersDto);
+        }
+
+        [HttpGet("{reviewerId}")]
+        [ProducesResponseType(200, Type = typeof(ReviewerDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult GetReviewer(int reviewerId)
+        {
+            if(!_reviewerRepository.ReviewerExists(reviewerId))
+                return NotFound();
+
+            var reviewer = _reviewerRepository.GetReviewer(reviewerId);
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reviewerDto = new ReviewerDto()
+            {
+                Id = reviewer.Id,
+                FirstName = reviewer.FirstName,
+                LastName = reviewer.LastName
+            };
+            return Ok(reviewerDto);
+        }
+
+        // api/reviewers/{reviewerId}/reviews
+        [HttpGet("{reviewerId}/reviews")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ReviewDto>))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult GetReviewsByReviewer(int reviewerId)
+        {
+            if(!_reviewerRepository.ReviewerExists(reviewerId))
+                return NotFound();
+
+            var reviews = _reviewerRepository.GetReviewsByReviewer(reviewerId);
+
+            if(!_reviewerRepository.ReviewerExists(reviewerId))
+                return NotFound();
+
+            var reviewsDto = new List<ReviewDto>();
+
+            foreach (var review in reviews)
+            {
+                reviewsDto.Add(new ReviewDto()
+                {
+                    Id = review.Id,
+                    Headline = review.Headline,
+                    Rating = review.Rating,
+                    ReviewText = review.ReviewText
+                });
+            }
+
+            return Ok(reviewsDto);
+        }
+
+        // api/reviewers/reviewId/reviewer
+        [HttpGet("{reviewId}/reviewer")]
+        [ProducesResponseType(200, Type = typeof(ReviewDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult GetReviewerofAReview(int reviewId)
+        {
+            if(!_reviewRepository.ReviewExists(reviewId))
+                return NotFound();
+
+            var reviewer = _reviewerRepository.GetReviewerOfAReview(reviewId);
+
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reviewerDto = new ReviewerDto()
+            {
+                Id = reviewer.Id,
+                FirstName = reviewer.FirstName,
+                LastName = reviewer.LastName
+            };
+            return Ok(reviewerDto);
         }
     }
 }
