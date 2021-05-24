@@ -6,7 +6,7 @@ namespace BookApi.Services
 {
     public class CategoryRepository : ICategoryRepository
     {
-        public BookDBContext _categoryContext { get; }
+        public BookDBContext _categoryContext;
         public CategoryRepository(BookDBContext categoryContext)
         {
             _categoryContext = categoryContext;
