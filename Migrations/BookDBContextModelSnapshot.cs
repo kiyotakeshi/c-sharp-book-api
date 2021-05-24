@@ -81,6 +81,8 @@ namespace BookApi.Migrations
 
                     b.HasKey("BookId", "AuthorId");
 
+                    b.HasIndex("AuthorId");
+
                     b.ToTable("BookAuthors");
                 });
 
@@ -201,7 +203,7 @@ namespace BookApi.Migrations
                 {
                     b.HasOne("BookApi.Models.Author", "Author")
                         .WithMany("BookAuthors")
-                        .HasForeignKey("BookId")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
