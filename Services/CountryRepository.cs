@@ -18,6 +18,18 @@ namespace BookApi.Services
             return _countryContext.Countries.Any(c => c.Id == countryId);
         }
 
+        public bool CreateCountry(Country country)
+        {
+            _countryContext.Add(country);
+            return Save();
+        }
+
+        public bool DeleteCountry(Country country)
+        {
+            _countryContext.Remove(country);
+            return Save();
+        }
+
         public ICollection<Author> GetAuthorsFromACountry(int countryId)
         {
             return _countryContext.Authors.Where(c => c.Country.Id == countryId).ToList();
@@ -42,6 +54,18 @@ namespace BookApi.Services
         {
             var country = _countryContext.Countries.Where(c => c.Name.Trim().ToUpper() == countryName.Trim().ToUpper() && c.Id != countryId).FirstOrDefault();
             return country == null ? false : true;
+        }
+
+        public bool Save()
+        {
+            var saved = _countryContext.SaveChanges();
+            return saved >= 0 ? true : false;
+        }
+
+        public bool UpdateCountry(Country country)
+        {
+            _countryContext.Update(country);
+            return Save();
         }
     }
 }

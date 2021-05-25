@@ -11,7 +11,6 @@ namespace BookApi.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        [Required]
         [MaxLength(50, ErrorMessage = "Country mubst be up to 50 characters in length")]
         public virtual ICollection<Author> Authors { get; set; }
     }

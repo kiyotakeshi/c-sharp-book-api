@@ -48,7 +48,7 @@ namespace BookApi
                 app.UseExceptionHandler("/Error");
             }
             // シードデータを流すときのみ使用
-            context.SeedDataContext();
+            // context.SeedDataContext();
 
             app.UseRouting();
 
