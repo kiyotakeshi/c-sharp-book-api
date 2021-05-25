@@ -124,7 +124,7 @@ namespace BookApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(422)]
         [ProducesResponseType(500)]
-        public IActionResult CreateCountry([FromBody]Country countryToCreate)
+        public IActionResult CreateCountry([FromBody] Country countryToCreate)
         {
             if(countryToCreate == null)
                 return BadRequest();
@@ -150,5 +150,43 @@ namespace BookApi.Controllers
             // routing to `api/countries/countryId`
             return CreatedAtRoute("GetCountry", new { countryId = countryToCreate.Id}, countryToCreate);
         }
+
+        // 以下のエラーが解消しない(DB の table の設定を変更したが... `SET IDENTITY_INSERT Book.dbo.Countries ON;` )
+        // inmemory でやる方法を考えるか、 mssql との繋ぎ込みに関しては一旦は深追いしない
+        // Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert explicit value for identity column in table 'Countries' when IDENTITY_INSERT is set to OFF.
+        // [HttpPut("{countryId}")]
+        // [ProducesResponseType(204)] // no content
+        // [ProducesResponseType(400)]
+        // [ProducesResponseType(404)]
+        // [ProducesResponseType(422)]
+        // [ProducesResponseType(500)]
+        // public IActionResult UpdateCountry(int countryId, [FromBody] Country updateCountryInfo)
+        // {
+        //     if(updateCountryInfo == null)
+        //         return BadRequest(ModelState);
+
+        //     if(countryId != updateCountryInfo.Id)
+        //         return BadRequest();
+
+        //     if(!_countryRepository.CountryExists(countryId))
+        //         return NotFound();
+
+        //     // 重複していたらエラー
+        //     if(_countryRepository.IsDuplicateCountryName(countryId, updateCountryInfo.Name))
+        //     {
+        //         ModelState.AddModelError("", $"Country {updateCountryInfo.Name} already exists");
+        //         return StatusCode(422, ModelState);
+        //     }
+
+        //     if(!ModelState.IsValid)
+        //         return BadRequest(ModelState);
+
+        //     if(!_countryRepository.CreateCountry(updateCountryInfo))
+        //     {
+        //         ModelState.AddModelError("", $"Something went wrong updating {updateCountryInfo.Name}");
+        //         return StatusCode(500, ModelState);
+        //     }
+        //     return NoContent();
+        // }
     }
 }
