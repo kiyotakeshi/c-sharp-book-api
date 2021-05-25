@@ -9,10 +9,12 @@ namespace BookApi.Controllers
     [ApiController]
     public class CategoriesController : Controller
     {
-        public ICategoryRepository _categoryRepository;
-        public CategoriesController(ICategoryRepository categoryRepository)
+        private ICategoryRepository _categoryRepository;
+        private IBookRepository _bookRepository;
+        public CategoriesController(ICategoryRepository categoryRepository, IBookRepository bookRepository)
         {
             _categoryRepository = categoryRepository;
+            _bookRepository = bookRepository;
         }
 
         [HttpGet]
@@ -66,7 +68,9 @@ namespace BookApi.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<CategoryDto>))] // 必須ではない記述、ドキュメント的な役割
         public IActionResult GetAllCategoriesForABook(int bookId)
         {
-            // TODO: Validate the book exists
+            if(!_bookRepository.BookExists(bookId))
+                return NotFound();
+
             var categories = _categoryRepository.GetAllCategoriesForABook(bookId);
 
             if (!ModelState.IsValid)
@@ -82,6 +86,7 @@ namespace BookApi.Controllers
             }
             return Ok(categoriesDto);
         }
+
         // TODO: GetAllBooksForCategory
         // api/categories/categoryId/books
         [HttpGet("{categoryId}/books")]

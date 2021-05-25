@@ -11,9 +11,11 @@ namespace BookApi.Controllers
     public class CountriesController : Controller
     {
         private ICountryRepository _countryRepository;
-        public CountriesController(ICountryRepository countryRepository)
+        private IAuthorRepository _authorRepository;
+        public CountriesController(ICountryRepository countryRepository, IAuthorRepository authorRepository)
         {
             _countryRepository = countryRepository;
+            _authorRepository = authorRepository;
         }
 
         [HttpGet]
@@ -68,7 +70,9 @@ namespace BookApi.Controllers
         [ProducesResponseType(200, Type = typeof(CountryDto))] // 必須ではない記述、ドキュメント的な役割
         public IActionResult GetCountyOfAnAuthor(int authorId)
         {
-            // TODO: Validate the author exists
+            if(!_authorRepository.AuthorExists(authorId))
+                return NotFound();
+
             var country = _countryRepository.GetCountryOfAnAuthor(authorId);
 
             if (!ModelState.IsValid)

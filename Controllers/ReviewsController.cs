@@ -11,14 +11,13 @@ namespace BookApi.Controllers
     {
         private IReviewRepository _reviewRepository;
         private IReviewerRepository _reviewerRepository;
-        // private IBookRepository _bookRepository;
-        public ReviewsController(IReviewRepository reviewRepository, IReviewerRepository reviewerRepository
-            // ,IBookRepository bookRepository
+        private IBookRepository _bookRepository;
+        public ReviewsController(IReviewRepository reviewRepository, IReviewerRepository reviewerRepository,IBookRepository bookRepository
             )
         {
             _reviewRepository = reviewRepository;
             _reviewerRepository = reviewerRepository;
-            // _bookRepository = bookRepository;
+            _bookRepository = bookRepository;
         }
 
         [HttpGet]
@@ -77,8 +76,8 @@ namespace BookApi.Controllers
         [ProducesResponseType(404)]
         public IActionResult GetReviewsForABook(int bookId)
         {
-            // if(!_bookRepository.BookExists(bookId))
-            //     return NotFound();
+            if(!_bookRepository.BookExists(bookId))
+                return NotFound();
 
             var reviews = _reviewRepository.GetReviewsOfABook(bookId);
 

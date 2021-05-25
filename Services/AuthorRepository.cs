@@ -29,7 +29,7 @@ namespace BookApi.Services
             return _authorContext.Authors.OrderBy(a => a.LastName).ToList();
         }
 
-        public ICollection<Author> GetAuthorsOfBook(int bookId)
+        public ICollection<Author> GetAuthorsOfABook(int bookId)
         {
             return _authorContext.BookAuthors.Where(b => b.BookId == bookId).Select(a => a.Author).ToList();
         }
